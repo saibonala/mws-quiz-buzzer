@@ -32,7 +32,7 @@ export default function Header({
           <img
             src="/mws-logo.png"
             alt="Meemunnamu Welfare Society"
-            height="200"
+            height="150"
           />
           <span>MWS Quiz Buzzer</span>
         </Navbar.Brand>

@@ -8,6 +8,31 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { leaveRoom } from '../lib/endpoints';
 
+// known female Indian-English voice names across platforms (Windows, Android/Google TTS)
+const FEMALE_INDIAN_VOICE_NAMES = [
+  'neerja',
+  'heera',
+  'priya',
+  'kajal',
+  'lekha',
+];
+
+function getIndianVoice() {
+  const indianVoices = window.speechSynthesis
+    .getVoices()
+    .filter((v) => v.lang.toLowerCase() === 'en-in' || /india/i.test(v.name));
+
+  return (
+    indianVoices.find((v) =>
+      FEMALE_INDIAN_VOICE_NAMES.some((name) =>
+        v.name.toLowerCase().includes(name)
+      )
+    ) ||
+    indianVoices.find((v) => /female/i.test(v.name)) ||
+    indianVoices[0]
+  );
+}
+
 export default function Table(game) {
   const history = useHistory();
   const [loaded, setLoaded] = useState(false);
@@ -54,9 +79,12 @@ export default function Table(game) {
     }
 
     announceTimeoutRef.current = setTimeout(() => {
-      window.speechSynthesis.speak(
-        new SpeechSynthesisUtterance(`${player.name} buzzed in first!`)
+      const utterance = new SpeechSynthesisUtterance(
+        `${player.name} buzzed in first!`
       );
+      utterance.lang = 'en-IN';
+      utterance.voice = getIndianVoice();
+      window.speechSynthesis.speak(utterance);
     }, 2000);
   };
 
@@ -228,7 +256,7 @@ export default function Table(game) {
             {buzzedPlayers.map(({ id, name, timestamp, connected }, i) => (
               <li key={id} className={isHost ? 'resettable' : null}>
                 <div
-                  className="player-sign"
+                  className={`player-sign ${i === 0 ? 'first' : ''}`}
                   onClick={() => {
                     if (isHost) {
                       game.moves.resetBuzzer(id);

@@ -392,6 +392,20 @@ body {
   background-color: var(--lightBackgroundColor);
 }
 
+.App .queue li .player-sign.first {
+  background-color: var(--yellowColor);
+}
+
+.App .queue li .player-sign.first .name {
+  color: var(--backgroundColor);
+  font-weight: 700;
+}
+
+.App .queue li.resettable .player-sign.first:hover {
+  background-color: var(--yellowColor);
+  opacity: 0.85;
+}
+
 .App .queue .disconnected {
   margin-left: 5px;
   color: var(--redColor);
