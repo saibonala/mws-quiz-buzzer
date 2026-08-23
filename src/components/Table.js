@@ -55,7 +55,7 @@ export default function Table(game) {
 
     announceTimeoutRef.current = setTimeout(() => {
       window.speechSynthesis.speak(
-        new SpeechSynthesisUtterance(`${player.name} hit the buzzer first`)
+        new SpeechSynthesisUtterance(`${player.name} buzzed in first!`)
       );
     }, 2000);
   };
