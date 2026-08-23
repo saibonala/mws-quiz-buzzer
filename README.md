@@ -1,8 +1,4 @@
-## Multibuzzer
-
-Simple multiplayer buzzer system
-
-https://multibuzz.app
+## MWS Quiz Buzzer
 
 Built using Create React App and boardgame.io
 
@@ -18,3 +14,4 @@ Please open an issue if you experience a bug or have product feedback!
 
 - Build React app using `yarn build`
 - Run `yarn start` to run the Koa server, which will serve the built React app (via '/build'), as well as operate both the boardgame.io server and lobby
+

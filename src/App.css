@@ -38,32 +38,71 @@ body {
 }
 
 .App header nav {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 60px;
+  width: 100%;
+  padding: 12px 24px;
 }
 
 .App header .navbar-brand {
   color: white;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 2rem;
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 0;
 }
 
 .App header .navbar-brand:hover {
   color: white;
 }
 
-.App header nav {
-  justify-content: space-between;
+.App header .navbar-brand img {
+  margin-right: 10px;
 }
 
-.App header svg {
-  margin-right: 10px;
+.App header .navbar-brand.brand-stacked {
+  flex-direction: column;
+  align-items: center;
+}
+
+.App header .navbar-brand.brand-stacked img {
+  margin-right: 0;
+  margin-bottom: 6px;
+}
+
+.App header .nav-buttons {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
 }
 
 .App header .nav-buttons > :not(:first-child) {
   margin-left: 5px;
+}
+
+@media screen and (max-width: 767px) {
+  .App header nav {
+    padding: 0 16px;
+  }
+
+  .App header .nav-buttons {
+    right: 16px;
+  }
+
+  .App header .navbar-brand {
+    font-size: 2rem;
+  }
+
+  .App header .navbar-brand img {
+  }
 }
 
 /* BUTTON */
@@ -103,10 +142,10 @@ body {
 /* FOOTER */
 .App footer {
   background-color: var(--backgroundColor);
-  padding: 30px 0;
+  padding: 24px 0;
   color: var(--paragraphColor);
   text-align: center;
-  margin-top: 40px;
+  margin-top: auto;
 }
 
 .App #footer-simple {
@@ -127,76 +166,66 @@ body {
 
 /* LOBBY */
 
-.App #lobby-left {
-  flex-grow: 40;
-  flex-basis: 320px;
-  background-color: var(--darkBlueColor);
+.App #lobby .lobby-page {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-height: 100vh;
 }
 
-.App #lobby-right {
-  flex-grow: 60;
-  flex-basis: 480px;
+.App #lobby .lobby-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
 }
 
-.container-half {
+.App #lobby .lobby-form-card {
   width: 100%;
-  max-width: 375px;
-  padding-right: 40px;
-  padding-left: 40px;
+  max-width: 420px;
+  background-color: var(--darkBlueColor);
+  border-radius: 12px;
+  padding: 36px 40px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-@media screen and (max-width: 991px) {
-  .container-half {
-    max-width: 350px;
+@media screen and (max-width: 767px) {
+  .App #lobby .lobby-content {
+    padding: 32px 20px;
+  }
+
+  .App #lobby .lobby-form-card {
+    padding: 28px 24px;
   }
 }
 
-.App #lobby-left .container-half {
-  margin-left: auto;
-  margin-top: 100px;
-  padding-right: 60px;
-}
-
-.App #lobby-right .container-half {
-  margin-right: auto;
-  margin-top: 160px;
-  padding-left: 60px;
-}
-
-.App #lobby .container-mobile {
-  margin-top: 40px;
-  padding: 0 30px;
-  max-width: 400px;
-}
-
-.App .divider {
-  border: 1px solid var(--activeColor);
-  margin: 60px auto;
-  width: 75%;
-}
-
-.App .touts > :not(:first-child) {
-  margin-top: 40px;
-}
-
-.App .touts h4 {
+.App .lobby-form label {
+  color: var(--dimTextColor);
+  font-size: 0.9rem;
   font-weight: 500;
-  font-size: 1.2rem;
-  line-height: 140%;
+  margin-bottom: 0.4rem;
 }
 
-.App .touts p {
-  color: var(--paragraphColor);
-  line-height: 140%;
-  font-size: 1rem;
+.App .lobby-form .form-control {
+  background-color: var(--lightBackgroundColor);
+  border: 1px solid var(--activeColor);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+
+.App .lobby-form .form-control:focus {
+  background-color: var(--lightBackgroundColor);
+  border-color: var(--brightBlueColor);
+  color: white;
+  box-shadow: 0 0 0 2px rgba(52, 141, 245, 0.25);
 }
 
 .App .lobby-form h3 {
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  text-align: center;
+  font-weight: 600;
 }
 
 .App .lobby-form .form-group:not(:first-of-type) {
@@ -367,6 +396,17 @@ body {
   margin-left: 5px;
   color: var(--redColor);
   opacity: 1;
+}
+
+.App .game-controls {
+  margin-top: 40px;
+  padding-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.App .game-controls > :not(:first-child) {
+  margin-left: 15px;
 }
 
 .App .mini {

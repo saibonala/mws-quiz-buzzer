@@ -1,6 +1,6 @@
 {
-    "name": "Multibuzzer",
-    "short_name": "Multibuzzer",
+    "name": "MWS Quiz Buzzer",
+    "short_name": "MWS Quiz Buzzer",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

@@ -1,14 +1,9 @@
 {
-  "name": "multibuzzer",
+  "name": "mws-quiz-buzzer",
   "version": "0.1.0",
-  "author": "iamwillsun@gmail.com",
   "license": "MIT",
-  "repository": "https://github.com/wsun/multibuzzer",
-  "engines": {
-    "node": "20.12.2"
-  },
   "scripts": {
-    "start": "node -r esm src/server.js",
+    "start": "node src/server.js",
     "dev": "concurrently \"PORT=4000 yarn client\" \"PORT=4001 yarn start\"",
     "client": "react-scripts start",
     "build": "react-scripts build",
@@ -18,7 +13,6 @@
   "dependencies": {
     "axios": "^1.7.7",
     "boardgame.io": "wsun/boardgame.io#master",
-    "esm": "^3.2.25",
     "howler": "^2.1.3",
     "koa-ratelimit": "^4.2.1",
     "koa-static": "^5.0.0",

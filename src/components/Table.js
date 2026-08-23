@@ -1,20 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router';
 import { get, some, values, sortBy, orderBy, isEmpty, round } from 'lodash';
 import { Howl } from 'howler';
 import { AiOutlineDisconnect } from 'react-icons/ai';
 import { Container } from 'react-bootstrap';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { leaveRoom } from '../lib/endpoints';
 
 export default function Table(game) {
+  const history = useHistory();
   const [loaded, setLoaded] = useState(false);
   const [buzzed, setBuzzer] = useState(
     some(game.G.queue, (o) => o.id === game.playerID)
   );
   const [lastBuzz, setLastBuzz] = useState(null);
-  const [sound, setSound] = useState(false);
+  const [sound, setSound] = useState(true);
   const [soundPlayed, setSoundPlayed] = useState(false);
+  const [announced, setAnnounced] = useState(false);
   const buzzButton = useRef(null);
   const queueRef = useRef(null);
+  const announceTimeoutRef = useRef(null);
 
   const buzzSound = new Howl({
     src: [
@@ -30,6 +36,28 @@ export default function Table(game) {
       buzzSound.play();
       setSoundPlayed(true);
     }
+  };
+
+  // announce the first player to buzz, a couple seconds after the buzz sound
+  const announceFirstBuzzer = () => {
+    if (!sound || announced) {
+      return;
+    }
+    setAnnounced(true);
+
+    const firstBuzz = get(sortBy(values(game.G.queue), ['timestamp']), '0');
+    const player = (game.gameMetadata || []).find(
+      (p) => String(p.id) === String(get(firstBuzz, 'id'))
+    );
+    if (!player || !window.speechSynthesis) {
+      return;
+    }
+
+    announceTimeoutRef.current = setTimeout(() => {
+      window.speechSynthesis.speak(
+        new SpeechSynthesisUtterance(`${player.name} hit the buzzer first`)
+      );
+    }, 2000);
   };
 
   useEffect(() => {
@@ -53,8 +81,11 @@ export default function Table(game) {
     // reset ability to play sound if there is no pending buzzer
     if (isEmpty(game.G.queue)) {
       setSoundPlayed(false);
+      setAnnounced(false);
+      clearTimeout(announceTimeoutRef.current);
     } else if (loaded) {
       playSound();
+      announceFirstBuzzer();
     }
 
     if (!loaded) {
@@ -63,6 +94,27 @@ export default function Table(game) {
 
     queueRef.current = game.G.queue;
   }, [game.G.queue]);
+
+  useEffect(() => () => clearTimeout(announceTimeoutRef.current), []);
+
+  // leave current game
+  async function leave() {
+    try {
+      await leaveRoom(
+        game.headerData.roomID,
+        game.headerData.playerID,
+        game.headerData.credentials
+      );
+    } catch (error) {
+      console.log('leave error', error);
+    }
+    game.headerData.setAuth({
+      playerID: null,
+      credentials: null,
+      roomID: null,
+    });
+    history.push('/');
+  }
 
   const attemptBuzz = () => {
     if (!buzzed) {
@@ -128,18 +180,7 @@ export default function Table(game) {
 
   return (
     <div>
-      <Header
-        auth={game.headerData}
-        clearAuth={() =>
-          game.headerData.setAuth({
-            playerID: null,
-            credentials: null,
-            roomID: null,
-          })
-        }
-        sound={sound}
-        setSound={() => setSound(!sound)}
-      />
+      <Header />
       <Container>
         <section>
           <p id="room-title">Room {game.gameID}</p>
@@ -229,7 +270,16 @@ export default function Table(game) {
             ))}
           </ul>
         </div>
+        <div className="game-controls">
+          <button className="text-button" onClick={() => setSound(!sound)}>
+            {sound ? 'Turn off sound' : 'Turn on sound'}
+          </button>
+          <button className="text-button" onClick={() => leave()}>
+            Leave game
+          </button>
+        </div>
       </Container>
+      <Footer />
     </div>
   );
 }
