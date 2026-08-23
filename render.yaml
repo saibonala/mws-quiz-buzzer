@@ -1,0 +1,10 @@
+services:
+  - name: mws-quiz-buzzer
+    type: web
+    runtime: node
+    plan: free
+    buildCommand: yarn build
+    startCommand: yarn start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
